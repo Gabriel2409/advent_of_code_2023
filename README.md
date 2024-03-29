@@ -1,3 +1,5 @@
+Original repo: https://github.com/ChristopherBiscardi/advent-of-code
+
 # Advent of Code 2023
 
 This year I've pre-set up a series of functionality for testing, benchmarking, and otherwise evaluating the performance of our Rust programs.
@@ -14,7 +16,8 @@ cargo flamegraph
 ```
 
 ## Quick setup
-``` shell
+
+```shell
 rustup default nightly
 cargo install cargo-nextest cargo-generate flamegraph
 brew install just tracy
