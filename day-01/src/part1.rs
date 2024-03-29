@@ -2,9 +2,9 @@ use crate::custom_error::AocError;
 
 #[tracing::instrument]
 pub fn process(
-    _input: &str,
+    input: &str,
 ) -> miette::Result<u32, AocError> {
-    let sum = _input
+    let sum = input
         .lines()
         .map(|l| {
             let mut it =
