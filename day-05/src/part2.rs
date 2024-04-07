@@ -26,6 +26,9 @@ impl MapRange {
             panic!("Expected correct input")
         }
         MapRange {
+            // NOTE: in input v[1] + v[2] actually overflows for u32
+            // I could use part1 impl to avoid storing the end and only store the
+            // len instead to avoid overflows
             source_range: v[1]..(v[1] + v[2]),
             dest_range: v[0]..(v[0] + v[2]),
         }
