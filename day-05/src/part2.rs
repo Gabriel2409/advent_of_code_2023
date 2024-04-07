@@ -16,32 +16,27 @@ use crate::custom_error::AocError;
 
 #[derive(Debug)]
 struct MapRange {
-    source_range: Range<u32>,
-    dest_range: Range<u32>,
+    source_range: Range<u64>,
+    dest_range: Range<u64>,
 }
 
 impl MapRange {
-    fn from_vec(v: &[u32]) -> Self {
+    fn from_vec(v: &[u64]) -> Self {
         if v.len() != 3 {
             panic!("Expected correct input")
         }
-        dbg!("A");
-        dbg!(v);
-        dbg!(v[1] + v[2]);
-        let b = MapRange {
+        MapRange {
             source_range: v[1]..(v[1] + v[2]),
             dest_range: v[0]..(v[0] + v[2]),
-        };
-        dbg!("B");
-        b
+        }
     }
 
     // First part of the tuple is ranges that were not updated and second are the
     // updated ranges
     fn translate_range(
         &self,
-        r: Range<u32>,
-    ) -> (Vec<Range<u32>>, Vec<Range<u32>>) {
+        r: Range<u64>,
+    ) -> (Vec<Range<u64>>, Vec<Range<u64>>) {
         if r.end <= self.source_range.start
             || r.start >= self.source_range.end
         {
@@ -74,8 +69,8 @@ impl MapRange {
     }
     fn translate_ranges(
         &self,
-        ranges: Vec<Range<u32>>,
-    ) -> (Vec<Range<u32>>, Vec<Range<u32>>) {
+        ranges: Vec<Range<u64>>,
+    ) -> (Vec<Range<u64>>, Vec<Range<u64>>) {
         let mut not_transformed = Vec::new();
         let mut transformed = Vec::new();
         for r in ranges {
@@ -96,8 +91,8 @@ struct Map {
 impl Map {
     fn translate_ranges(
         &self,
-        mut ranges: Vec<Range<u32>>,
-    ) -> Vec<Range<u32>> {
+        mut ranges: Vec<Range<u64>>,
+    ) -> Vec<Range<u64>> {
         let mut updated = Vec::new();
         for mr in &self.map_ranges {
             let (new_ranges, cur_updated) =
@@ -111,10 +106,10 @@ impl Map {
     }
 }
 
-fn get_seeds(input: &str) -> IResult<&str, Vec<u32>> {
+fn get_seeds(input: &str) -> IResult<&str, Vec<u64>> {
     preceded(
         tuple((tag("seeds:"), space0)),
-        separated_list1(space1, complete::u32),
+        separated_list1(space1, complete::u64),
     )(input)
 }
 
@@ -127,10 +122,10 @@ fn get_map_name(input: &str) -> IResult<&str, &str> {
 
 fn get_map_ranges(
     input: &str,
-) -> IResult<&str, Vec<Vec<u32>>> {
+) -> IResult<&str, Vec<Vec<u64>>> {
     separated_list1(
         line_ending,
-        separated_list1(space1, complete::u32),
+        separated_list1(space1, complete::u64),
     )(input)
 }
 fn get_map(input: &str) -> IResult<&str, Map> {
@@ -155,7 +150,7 @@ fn get_maps(input: &str) -> IResult<&str, Vec<Map>> {
 #[tracing::instrument]
 pub fn process(
     input: &str,
-) -> miette::Result<u32, AocError> {
+) -> miette::Result<u64, AocError> {
     let (input, seeds) = get_seeds(input).unwrap();
     let res: IResult<&str, Vec<&str>> =
         many1(line_ending)(input);
@@ -193,12 +188,12 @@ mod tests {
     #[case( 7..8, 6..9, 15..18,( vec![ ], vec![16..17]) )]
     #[case( 8..11, 6..9, 15..18,( vec![  9..11], vec![17..18]) )]
     fn test_translate_range(
-        #[case] initial_range: Range<u32>,
-        #[case] source_range: Range<u32>,
-        #[case] dest_range: Range<u32>,
+        #[case] initial_range: Range<u64>,
+        #[case] source_range: Range<u64>,
+        #[case] dest_range: Range<u64>,
         #[case] expected: (
-            Vec<Range<u32>>,
-            Vec<Range<u32>>,
+            Vec<Range<u64>>,
+            Vec<Range<u64>>,
         ),
     ) {
         let mr = MapRange {
