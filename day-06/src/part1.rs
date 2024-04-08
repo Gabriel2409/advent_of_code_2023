@@ -1,8 +1,6 @@
 use crate::custom_error::AocError;
 use itertools::Itertools;
-use nom::character::complete::{
-    alpha1, line_ending, multispace0, multispace1,
-};
+use nom::character::complete::{alpha1, line_ending};
 use nom::{
     bytes::complete::tag,
     character::complete::{self, space1},
@@ -57,7 +55,7 @@ fn get_races(time_and_dist_vecs: &[Vec<u32>]) -> Vec<Race> {
             }) // Access the first element of each subvector
             .collect()
     } else {
-        panic!("Should be able to constract the races")
+        panic!("Should be able to construct the races")
     }
 }
 
