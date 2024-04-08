@@ -61,6 +61,9 @@ fn get_map(input: &str) -> IResult<&str, Map> {
                 })
                 .collect(),
         })
+        // need to call parse because at this point I have a nom map
+        // and contrary to other parsers, the parse method does not call self on the
+        // input
         .parse(input)
 }
 
