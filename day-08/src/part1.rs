@@ -3,12 +3,10 @@ use std::collections::HashMap;
 use nom::{
     bytes::complete::tag,
     character::complete::{
-        alpha1, digit1, line_ending, multispace1, space1,
+        alpha1, line_ending, multispace1, space1,
     },
     multi::separated_list1,
-    sequence::{
-        delimited, separated_pair, terminated, tuple,
-    },
+    sequence::{terminated, tuple},
     IResult,
 };
 
@@ -56,7 +54,7 @@ pub fn process(
         .chars()
         .cycle()
         .enumerate()
-        .take_while(|(i, c)| {
+        .take_while(|(_, c)| {
             dbg!(c, key);
             if key == "ZZZ" {
                 false
